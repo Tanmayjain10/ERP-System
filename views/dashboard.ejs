@@ -1,0 +1,75 @@
+<%- include('partials/header') %>
+
+<!-- Navbar -->
+<nav class="navbar navbar-light bg-light">
+  <a class="navbar-brand" href="#">
+    <img src="images/erp.jfif" width="45" height="40" class="d-inline-block align-top" alt="ERP">
+    <span class="navbar-brand mb-0 h1">ERP System</span>
+  </a>
+</nav>
+
+<!-- Table -->
+<table class="table">
+  <thead class="thead-light">
+    <tr>
+      <th scope="col">#</th>
+      <th scope="col">S. No.</th>
+      <th scope="col">Name</th>
+      <th scope="col">Mobile No.</th>
+      <th scope="col">Email</th>
+      <th scope="col">Hobbies</th>
+      <th scope="col">Update/Delete</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><input type="checkbox"/></td>
+      <th scope="row">1</th>
+      <td>Mark</td>
+      <td>8947031030</td>
+      <td>abc@mdo.com</td>
+      <td>Making Websites</td>
+      <td>
+        <button class="btn btn-sm btn-primary">Update</button>
+        <button class="btn btn-sm btn-danger">Delete</button>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+<!-- Add Person Info Button and Send Button -->
+<div class="buttons">
+  <button type="button" class="btn btn-lg btn-success" onclick="add()">Add People Info</button>
+  <button type="button" class="btn btn-lg btn-primary send-btn">Send</button>
+</div>
+
+<!-- Pop-up Modal -->
+<div class="modal-form">
+  <div class="modal-content">
+    <div class="modal-heading-custom">
+      <h1 id="modal-h1">Add New Person</h1>
+      <div class="close-button" onclick="">x</div>
+    </div>
+    <div class="modal-content-custom">
+      <form action="/add" method="post">
+        <div class="form-outline form-white mb-4 pl-4 pr-4 form-first">
+          <input class="form-control form-control-lg" id="name" type="text" name="name" placeholder="Name" required>
+        </div>
+        <div class="form-outline form-white mb-4 pl-4 pr-4">
+          <input class="form-control form-control-lg" id="phoneno" type="number" name="phoneNo" placeholder="Phone No" required>
+        </div>
+        <div class="form-outline form-white mb-4 pl-4 pr-4">
+          <input class="form-control form-control-lg" id="email" type="email" name="email" placeholder="Email Id" required>
+        </div>
+        <div class="form-outline form-white mb-4 pl-4 pr-4">
+          <input class="form-control form-control-lg" id="hobbies" type="text" name="hobbies" placeholder="Hobbies" required>
+        </div>
+        <div class="save-button">
+          <button type="submit" class="btn btn-success btn-large" onclick="">Save</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<%- include('partials/footer') %>

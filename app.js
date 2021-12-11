@@ -10,7 +10,7 @@ app.use(express.static("public"));
 app.set("view engine", "ejs");
 app.use(bodyParser.urlencoded({extended: true}));
 
-mongoose.connect("mongodb://localhost:27017/ERPdb", {
+mongoose.connect("mongodb+srv://TanmayJain:admin_tanmay@cluster0.bbyth.mongodb.net/ERPdb", {
   useNewUrlParser: true,
   useUnifiedTopology: true
 });
@@ -26,6 +26,7 @@ const userSchema = new mongoose.Schema({
 const User = new mongoose.model('User', userSchema);
 
 let msg = 0;
+let msg2 = 0;
 
 app.get("/", (req, res) => {
 
@@ -35,10 +36,19 @@ app.get("/", (req, res) => {
       console.log(err);
     } else {
       if(msg === 1) {
-        res.render("dashboard", {peopleDataList: data, danger: "block"});
+        if(msg2 === 1)
+          res.render("dashboard", {peopleDataList: data, danger: "block", sentEmail: "block"});
+        else
+          res.render("dashboard", {peopleDataList: data, danger: "block", sentEmail: "none"});
         msg=0;
+        msg2=0;
       } else {
-        res.render("dashboard", {peopleDataList: data, danger: "none"});
+        if(msg2 === 1)
+          res.render("dashboard", {peopleDataList: data, danger: "none", sentEmail: "block"});
+        else
+          res.render("dashboard", {peopleDataList: data, danger: "none", sentEmail: "none"});
+        msg=0;
+        msg2=0;
       }
     }
   });
@@ -107,19 +117,11 @@ app.post("/sendEmail", (req, res) => {
 
   let text;
   let temp = [];
-  let temp1 = [];
   let result = [];
   text = req.body.sendEmail;
-  if(Array.isArray(text)) {
-    text.forEach((item,index) => {
-      temp = temp + "," + item.split(",");
-    });
-    temp1=temp.split(",");
-    for(var i=1;i<temp1.length;i++) {
-      result = result + temp1[i] + "\n";
-    }
-  } else {
-    result = text;
+  temp = text.split(",");
+  for(var i=0;i<temp.length;i++) {
+    result = result + temp[i] + "\n";
   }
 
   const transporter = nodemailer.createTransport({
@@ -137,17 +139,18 @@ app.post("/sendEmail", (req, res) => {
     text: result
   };
 
-  // if(result) {
+  if(result) {
     transporter.sendMail(mailOptions, function(error, info){
       if (error) {
         console.log(error);
       } else {
+        msg2=1;
         console.log('Email sent: ' + info.response);
       }
     });
-  // }
+  }
 
-  res.redirect("/");
+  setTimeout(function(){ res.redirect("/"); }, 5000);
 
 });
 

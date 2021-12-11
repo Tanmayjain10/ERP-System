@@ -21,11 +21,16 @@
 .buttons {
   display: flex;
   justify-content: center;
-  margin: 50px 0;
+  margin-top: 50px;
 }
 
 .delete-btn-form {
   display: inline;
+}
+
+.email-info {
+  text-align: center;
+  color: green;
 }
 
 /* -----------------------------Pop-up Modal----------------------------- */

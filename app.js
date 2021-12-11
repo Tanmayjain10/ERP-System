@@ -3,6 +3,7 @@ const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
 const ejs = require("ejs");
 const nodemailer = require("nodemailer");
+require("dotenv").config();
 
 const app = express();
 
@@ -128,7 +129,7 @@ app.post("/sendEmail", (req, res) => {
     service: 'gmail',
     auth: {
       user: 'tjsg1022@gmail.com',
-      pass: '2201gsjt'
+      pass: process.env.PASSWORD
     }
   });
 

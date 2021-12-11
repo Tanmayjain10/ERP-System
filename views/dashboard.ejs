@@ -6,70 +6,112 @@
     <img src="images/erp.jfif" width="45" height="40" class="d-inline-block align-top" alt="ERP">
     <span class="navbar-brand mb-0 h1">ERP System</span>
   </a>
+  <button type="button" class="btn btn-md mr-5 btn-success" id="add-btn">Add People Info</button>
 </nav>
 
-<!-- Table -->
-<table class="table">
-  <thead class="thead-light">
-    <tr>
-      <th scope="col">#</th>
-      <th scope="col">S. No.</th>
-      <th scope="col">Name</th>
-      <th scope="col">Mobile No.</th>
-      <th scope="col">Email</th>
-      <th scope="col">Hobbies</th>
-      <th scope="col">Update/Delete</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td><input type="checkbox"/></td>
-      <th scope="row">1</th>
-      <td>Mark</td>
-      <td>8947031030</td>
-      <td>abc@mdo.com</td>
-      <td>Making Websites</td>
-      <td>
-        <button class="btn btn-sm btn-primary">Update</button>
-        <button class="btn btn-sm btn-danger">Delete</button>
-      </td>
-    </tr>
-  </tbody>
-</table>
+<div class="heading">Here is the list of people added in ERP System.</div>
 
-<!-- Add Person Info Button and Send Button -->
-<div class="buttons">
-  <button type="button" class="btn btn-lg btn-success" onclick="add()">Add People Info</button>
-  <button type="button" class="btn btn-lg btn-primary send-btn">Send</button>
-</div>
+  <!-- Table -->
+  <table class="table">
+    <thead class="thead-light">
+      <tr>
+        <th scope="col">#</th>
+        <th scope="col">S. No.</th>
+        <th scope="col">Name</th>
+        <th scope="col">Mobile No.</th>
+        <th scope="col">Email</th>
+        <th scope="col">Hobbies</th>
+        <th scope="col">Update/Delete</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% peopleDataList.forEach((person,index) => { %>
+        <tr>
+          <td><input name="personCheckbox" type="checkbox" value="Name: <%=person.name%> Phone No: <%=person.phoneNo%> Email: <%=person.email%> Hobbies: <%=person.hobbies%>"/></td>
+          <th scope="row"><%=index+1%></th>
+          <td><%= person.name %></td>
+          <td><%= person.phoneNo %></td>
+          <td><%= person.email %></td>
+          <td><%= person.hobbies %></td>
+          <td>
+            <button type="button" class="btn btn-sm btn-primary update-btn" name="update" value=<%= person.email%>>Update</button>
+            <form action="/delete" method="post" class="delete-btn-form">
+              <button type="submit" class="btn btn-sm btn-danger" name="delete" value=<%= person.email%>>Delete</button>
+            </form>
+          </td>
+        </tr>
+      <% }); %>
+    </tbody>
+  </table>
 
-<!-- Pop-up Modal -->
-<div class="modal-form">
+  <!-- Send Email Button -->
+<form action="/sendEmail" method="post">
+  <div class="buttons">
+    <button type="submit" id="send-email-btn" name="sendEmail" class="btn btn-lg btn-primary send-btn" onclick="sendCheckbox()">Send</button>
+  </div>
+</form>
+
+<!-- Pop-up Form -->
+<div class="modal-form" style="display: <%= danger %>">
   <div class="modal-content">
     <div class="modal-heading-custom">
       <h1 id="modal-h1">Add New Person</h1>
-      <div class="close-button" onclick="">x</div>
+      <div class="close-button">x</div>
     </div>
     <div class="modal-content-custom">
-      <form action="/add" method="post">
+      <form action="/add" method="post" id="data-form">
         <div class="form-outline form-white mb-4 pl-4 pr-4 form-first">
-          <input class="form-control form-control-lg" id="name" type="text" name="name" placeholder="Name" required>
+          <input class="form-control form-control-lg" type="text" name="name" placeholder="Name" required>
         </div>
         <div class="form-outline form-white mb-4 pl-4 pr-4">
-          <input class="form-control form-control-lg" id="phoneno" type="number" name="phoneNo" placeholder="Phone No" required>
+          <input class="form-control form-control-lg" type="number" name="phoneNo" placeholder="Phone No" required>
         </div>
         <div class="form-outline form-white mb-4 pl-4 pr-4">
-          <input class="form-control form-control-lg" id="email" type="email" name="email" placeholder="Email Id" required>
+          <input class="form-control form-control-lg" type="email" name="email" placeholder="Email Id" required>
         </div>
         <div class="form-outline form-white mb-4 pl-4 pr-4">
-          <input class="form-control form-control-lg" id="hobbies" type="text" name="hobbies" placeholder="Hobbies" required>
+          <input class="form-control form-control-lg" type="text" name="hobbies" placeholder="Hobbies" required>
         </div>
         <div class="save-button">
-          <button type="submit" class="btn btn-success btn-large" onclick="">Save</button>
+          <button type="submit" class="btn btn-success btn-large">Save</button>
+        </div>
+        <div>
+          <p class="mb-0 err" style="display:<%= danger %>">*Email Already Exist</p>
         </div>
       </form>
     </div>
   </div>
 </div>
+
+<!-- Pop-up Update Form -->
+<div class="update-form">
+  <div class="modal-content">
+    <div class="modal-heading-custom">
+      <h1 id="modal-h1">Update Person</h1>
+      <div class="close-button close-button-update">x</div>
+    </div>
+    <div class="modal-content-custom">
+      <form action="/update" method="post" id="data-form-update">
+        <div class="form-outline form-white mb-4 pl-4 pr-4 form-first">
+          <input class="form-control form-control-lg" type="text" name="name" placeholder="Name" required>
+        </div>
+        <div class="form-outline form-white mb-4 pl-4 pr-4">
+          <input class="form-control form-control-lg" type="number" name="phoneNo" placeholder="Phone No" required>
+        </div>
+        <div class="form-outline form-white mb-4 pl-4 pr-4">
+          <input class="form-control form-control-lg" id="email" type="email" name="email" placeholder="Email Id" value="" readonly>
+        </div>
+        <div class="form-outline form-white mb-4 pl-4 pr-4">
+          <input class="form-control form-control-lg" type="text" name="hobbies" placeholder="Hobbies" required>
+        </div>
+        <div class="save-button">
+          <button type="submit" class="btn btn-success btn-large update">Update</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+
 
 <%- include('partials/footer') %>

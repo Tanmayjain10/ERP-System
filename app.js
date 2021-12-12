@@ -11,7 +11,7 @@ app.use(express.static("public"));
 app.set("view engine", "ejs");
 app.use(bodyParser.urlencoded({extended: true}));
 
-mongoose.connect("mongodb+srv://TanmayJain:"+ process.env.MONGOPASSWORD +"@cluster0.bbyth.mongodb.net/ERPdb", {
+mongoose.connect("mongodb+srv://TanmayJain:admin_tanmay@cluster0.bbyth.mongodb.net/ERPdb", {
   useNewUrlParser: true,
   useUnifiedTopology: true
 });

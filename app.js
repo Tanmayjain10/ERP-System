@@ -147,7 +147,7 @@ app.post("/sendEmail", (req, res) => {
 
     const mailOptions = {
       from: 'tjsg1022@gmail.com',
-      to: 'jain2015tanmay@gmail.com',
+      to: 'info@redpositive.in',
       subject: 'ERP System',
       text: result
     };

@@ -11,7 +11,7 @@ app.use(express.static("public"));
 app.set("view engine", "ejs");
 app.use(bodyParser.urlencoded({extended: true}));
 
-mongoose.connect("mongodb+srv://TanmayJain:admin_tanmay@cluster0.bbyth.mongodb.net/ERPdb", {
+mongoose.connect("mongodb+srv://TanmayJain:"+ process.env.MONGOPASSWORD +"@cluster0.bbyth.mongodb.net/ERPdb", {
   useNewUrlParser: true,
   useUnifiedTopology: true
 });
@@ -37,20 +37,29 @@ app.get("/", (req, res) => {
       console.log(err);
     } else {
       if(msg === 1) {
-        if(msg2 === 1)
-          res.render("dashboard", {peopleDataList: data, danger: "block", sentEmail: "block"});
-        else
-          res.render("dashboard", {peopleDataList: data, danger: "block", sentEmail: "none"});
-        msg=0;
-        msg2=0;
+          res.render("dashboard", {peopleDataList: data, danger: "block", sentEmail: "none", notSentEmail: "none"});
       } else {
-        if(msg2 === 1)
-          res.render("dashboard", {peopleDataList: data, danger: "none", sentEmail: "block"});
-        else
-          res.render("dashboard", {peopleDataList: data, danger: "none", sentEmail: "none"});
-        msg=0;
-        msg2=0;
+          res.render("dashboard", {peopleDataList: data, danger: "none", sentEmail: "none", notSentEmail: "none"});
       }
+      msg=0;
+    }
+  });
+});
+
+app.get("/sentMail", (req, res) => {
+
+  User.find((err, data) => {
+    if(err) {
+      console.log(err);
+    } else {
+      if(msg2 === 1) {
+        res.render("dashboard", {peopleDataList: data, danger: "none", sentEmail: "block", notSentEmail: "none"});
+      } else if(msg2 === 2){
+        res.render("dashboard", {peopleDataList: data, danger: "none", sentEmail: "none", notSentEmail: "block"});
+      } else {
+        res.render("dashboard", {peopleDataList: data, danger: "none", sentEmail: "none", notSentEmail: "none"})
+      }
+      msg2=0;
     }
   });
 });
@@ -104,7 +113,6 @@ app.post("/update", (req, res) => {
 
 app.post("/delete", (req, res) => {
   let email = req.body.delete;
-  console.log(email);
   User.deleteOne({ email : email}, (err)=> {
     if(err) {
       console.log(err);
@@ -115,43 +123,48 @@ app.post("/delete", (req, res) => {
 });
 
 app.post("/sendEmail", (req, res) => {
+  if(req.body.sendEmail === "") {
+    res.redirect("/sentMail");
+    msg2=2;
+  } else {
 
-  let text;
-  let temp = [];
-  let result = [];
-  text = req.body.sendEmail;
-  temp = text.split(",");
-  for(var i=0;i<temp.length;i++) {
-    result = result + temp[i] + "\n";
-  }
-
-  const transporter = nodemailer.createTransport({
-    service: 'gmail',
-    auth: {
-      user: 'tjsg1022@gmail.com',
-      pass: process.env.PASSWORD
+    let text;
+    let temp = [];
+    let result = [];
+    text = req.body.sendEmail;
+    temp = text.split(",");
+    for(var i=0;i<temp.length;i++) {
+      result = result + temp[i] + "\n";
     }
-  });
 
-  const mailOptions = {
-    from: 'tjsg1022@gmail.com',
-    to: 'jain2015tanmay@gmail.com',
-    subject: 'ERP System',
-    text: result
-  };
+    const transporter = nodemailer.createTransport({
+      service: 'gmail',
+      auth: {
+        user: 'tjsg1022@gmail.com',
+        pass: process.env.PASSWORD
+      }
+    });
 
-  if(result) {
+    const mailOptions = {
+      from: 'tjsg1022@gmail.com',
+      to: 'jain2015tanmay@gmail.com',
+      subject: 'ERP System',
+      text: result
+    };
+
     transporter.sendMail(mailOptions, function(error, info){
       if (error) {
         console.log(error);
       } else {
+
+        //Email sent
         msg2=1;
         console.log('Email sent: ' + info.response);
       }
     });
-  }
 
-  setTimeout(function(){ res.redirect("/"); }, 5000);
+    setTimeout(function(){ res.redirect("/sentMail"); }, 5000);
+  }
 
 });
 

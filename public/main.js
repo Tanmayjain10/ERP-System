@@ -20,7 +20,9 @@ window.onclick = function(event) {
   const updateForm = document.querySelector(".update-form");
   if(event.target == modalForm || event.target == updateForm) {
     const form = document.getElementById("data-form");
+    const formUpdate =  document.getElementById("data-form-update");
     form.reset();
+    formUpdate.reset();
     event.target.style.display="none";
     document.querySelector(".err").style.display = "none";
   }
@@ -38,6 +40,8 @@ update.forEach(item => {
 // Close button of Update form
 document.querySelector(".close-button-update").addEventListener("click", () => {
   document.querySelector(".update-form").style.display = "none";
+  const formUpdate =  document.getElementById("data-form-update");
+  formUpdate.reset();
 })
 
 //Send button

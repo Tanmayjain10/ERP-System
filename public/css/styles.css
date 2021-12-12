@@ -33,6 +33,11 @@
   color: green;
 }
 
+.email-info-not {
+  text-align: center;
+  color: red;
+}
+
 /* -----------------------------Pop-up Modal----------------------------- */
 .modal-form {
   display: none;

@@ -11,7 +11,7 @@ app.use(express.static("public"));
 app.set("view engine", "ejs");
 app.use(bodyParser.urlencoded({extended: true}));
 
-mongoose.connect("mongodb+srv://TanmayJain:admin_tanmay@cluster0.bbyth.mongodb.net/ERPdb", {
+mongoose.connect("mongodb+srv://TanmayJain:"+ process.env.MONGOPASSWORD +"@cluster0.bbyth.mongodb.net/ERPdb", {
   useNewUrlParser: true,
   useUnifiedTopology: true
 });
@@ -141,7 +141,7 @@ app.post("/sendEmail", (req, res) => {
       service: 'gmail',
       auth: {
         user: 'tjsg1022@gmail.com',
-        pass: '2201gsjt'
+        pass: process.env.PASSWORD
       }
     });
 
